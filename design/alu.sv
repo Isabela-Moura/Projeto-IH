@@ -1,3 +1,5 @@
+#Obs: Falaram que talvez desse erro com sinal nas funcoes de ADD, SUB e SRAI entao era pra colocar $signed
+
 `timescale 1ns / 1ps
 
 module alu#(
@@ -17,13 +19,32 @@ module alu#(
             case(Operation)
             4'b0000:        // AND
                     ALUResult = SrcA & SrcB;
-            4'b0010:        // ADD
-                    ALUResult = SrcA + SrcB;
-            4'b1000:        // Equal
+			      4'b0001:        // OR
+                    ALUResult = SrcA | SrcB;
+            4'b0010:        // XOR
+                    ALUResult = SrcA ^ SrcB;
+            4'b0011:        // ADD, ADDI
+                    ALUResult = $signed(SrcA) + $signed(SrcB);
+            4'b0100:        // BNE
+                    ALUResult = (SrcA != SrcB) ? 1 : 0;
+            4'b0101:        // BLT
+                    ALUResult = (SrcA < SrcB) ? 1 : 0;
+            4'b0110:        // BGE
+                    ALUResult = ((SrcA >= SrcB) ? 1 : 0;
+            4'b0111:        // SLT, SLTI
+                    ALUResult = (SrcA < SrcB) ? 1 : 0;
+            4'b1000:        // BEQ
                     ALUResult = (SrcA == SrcB) ? 1 : 0;
+            4'b1001:        // SUB
+                    ALUResult = $signed(SrcA) - $signed(SrcB);
+            4'b1010:        // SRAI (verificar se ta certo depois) 
+                    ALUResult = $signed(SrcA) >>> SrcB[4:0];
+            4'b1011:        // SRLI
+                    ALUResult = SrcA >> SrcB;
+            4'b1100:        // SLLI
+                    ALUResult = SrcA << SrcB;
             default:
                     ALUResult = 0;
             endcase
         end
 endmodule
-
