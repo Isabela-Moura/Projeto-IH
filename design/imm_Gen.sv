@@ -5,12 +5,19 @@ module imm_Gen (
     output logic [31:0] Imm_out
 );
 
+//Explicacao dessa parte: a saída sao 32 bits.
+//Ele vai comparar o bit mais significativo (no caso das imediatas), para saber se é negativo ou positivo.
+// Se for 1 (neg), vai concatenar 1111..., caso contrario (pos) vai concatenar 00...
+// Tem que fazer isso pro ADDI, JAL, JALR
 
   always_comb
     case (inst_code[6:0])
       7'b0000011:  /*I-type load part*/
       Imm_out = {inst_code[31] ? 20'hFFFFF : 20'b0, inst_code[31:20]};
-
+			
+			7'b0010011:  /*I-type*/ // ADDI
+      Imm_out = {inst_code[31] ? 20'hFFFFF : 20'b0, inst_code[31:20]};
+      
       7'b0100011:  /*S-type*/
       Imm_out = {inst_code[31] ? 20'hFFFFF : 20'b0, inst_code[31:25], inst_code[11:7]};
 
@@ -23,6 +30,8 @@ module imm_Gen (
         inst_code[11:8],
         1'b0
       };
+      
+   
 
       default: Imm_out = {32'b0};
 
