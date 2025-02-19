@@ -1,5 +1,3 @@
-#Obs: Falaram que talvez desse erro com sinal nas funcoes de ADD, SUB e SRAI entao era pra colocar $signed
-
 `timescale 1ns / 1ps
 
 module alu#(
@@ -37,8 +35,8 @@ module alu#(
                     ALUResult = (SrcA == SrcB) ? 1 : 0;
             4'b1001:        // SUB
                     ALUResult = $signed(SrcA) - $signed(SrcB);
-            4'b1010:        // SRAI (verificar se ta certo depois) 
-                    ALUResult = $signed(SrcA) >>> SrcB[4:0];
+            4'b1010:        // SRAI
+                    ALUResult = $signed(SrcA) >>> $signed(SrcB);
             4'b1011:        // SRLI
                     ALUResult = SrcA >> SrcB;
             4'b1100:        // SLLI
