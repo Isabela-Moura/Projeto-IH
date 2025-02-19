@@ -42,10 +42,10 @@ module datamemory #(
         3'b000: begin //LB
 	        rd <= $signed(Dataout[7:0]);
 	      end
-	      3'001:begin //LH
+	      3'b001:begin //LH
 		      rd <= $signed(Dataout[15:0]);
 		    end
-		    3'100:begin //LBU
+		    3'b100:begin //LBU
 		      rd <= $signed(24'b0,Dataout[7:0]);
 		    end
         default: rd <= Dataout;
