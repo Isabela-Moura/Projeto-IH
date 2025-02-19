@@ -11,14 +11,14 @@ module ALUController (
 );
 
   assign Operation[0] = ((ALUOp == 2'b00) ||  // LW\SW
-		  ((ALUOp == 2'b10) && (Funct3 == 3'b110)) ||  // R\I-Or
+      ((ALUOp == 2'b10) && (Funct3 == 3'b110)) ||  // R\I-Or
       ((ALUOp == 2'b10) && (Funct3 == 3'b000) && (Funct7 == 7'b0000000)) ||  // R\I-Add
       ((ALUOp == 2'b10) && (Funct3 == 3'b000) && (Funct7 != 7'b0100000)) || // R\I-Addi
       ((ALUOp == 2'b01) && (Funct3 == 3'b100)) || // Branch-Blt
       ((ALUOp == 2'b10) && (Funct3 == 3'b010)) || // R/I-Slt, Slti
       ((ALUOp == 2'b10) && (Funct3 == 3'b000) && (Funct7 == 7'b0100000)) || // R/I-Sub
       ((ALUOp == 2'b10) && (Funct3 == 3'b101) && (Funct7 == 7'b0000000)) || // R/I-Srli
-		  ((ALUOp == 2'b11) && (Funct3 == 3'b000))); // U-Jarl
+      ((ALUOp == 2'b11) && (Funct3 == 3'b000))); // U-Jal/Jarl
 
   assign Operation[1] = ((ALUOp == 2'b00) ||  // LW\SW
       ((ALUOp == 2'b10) && (Funct3 == 3'b100))  ||  // R\I-Xor
@@ -34,14 +34,14 @@ module ALUController (
       ((ALUOp == 2'b01) && (Funct3 == 3'b101)) || // Branch-Bge
       ((ALUOp == 2'b10) && (Funct3 == 3'b010)) || // R/I-Slt, Slti
       ((ALUOp == 2'b10) && (Funct3 == 3'b001) && (Funct7 == 7'b0000000)) || // R/I-Slli
-      ((ALUOp == 2'b11) && (Funct3 == 3'b000))); // U-Jarl
+      ((ALUOp == 2'b11) && (Funct3 == 3'b000))); // U-Jal/Jarl
 		  
   assign Operation[3] = (((ALUOp == 2'b01) && (Funct3 == 3'b000)) ||  // Branch-Beq
       ((ALUOp == 2'b10) && (Funct3 == 3'b000) && (Funct7 == 7'b0100000)) || // R/I-Sub
       ((ALUOp == 2'b10) && (Funct3 == 3'b101) && (Funct7 == 7'b0100000)) || // R/I-Srai
       ((ALUOp == 2'b10) && (Funct3 == 3'b101) && (Funct7 == 7'b0000000)) || // R/I-Srli
       ((ALUOp == 2'b10) && (Funct3 == 3'b001) && (Funct7 == 7'b0000000)) || // R/I-Slli
-      ((ALUOp == 2'b11) && (Funct3 == 3'b000))); // U-Jarl
+      ((ALUOp == 2'b11) && (Funct3 == 3'b000))); // U-Jal/Jarl
 
 
 endmodule
