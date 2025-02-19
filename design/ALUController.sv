@@ -2,7 +2,7 @@
 
 module ALUController (
     //Inputs
-    input logic [1:0] ALUOp,  // 2-bit opcode field from the Controller--00: LW/SW/AUIPC; 01:Branch; 10: Rtype/Itype; 11:JAL/LUI
+    input logic [1:0] ALUOp,  // 2-bit opcode field from the Controller--00: LW/SW/AUIPC; 01:Branch; 10: Rtype/Itype; 11:U_TYPE/JALR
     input logic [6:0] Funct7,  // bits 25 to 31 of the instruction
     input logic [2:0] Funct3,  // bits 12 to 14 of the instruction
 
@@ -11,35 +11,37 @@ module ALUController (
 );
 
   assign Operation[0] = ((ALUOp == 2'b00) ||  // LW\SW
-	((ALUOp == 2'b10) && (Funct3 == 3'b110) && (Funct7 == 7'b0000000)) ||  // R\I->>or
-	((ALUOp == 2'b10) && (Funct3 == 3'b000) && (Funct7 == 7'b0000000)) ||  // R\I->>add
-	((ALUOp == 2'b10) && (Funct3 == 3'b000) && (Funct7 != 7'b0100000)) || // R/I->>addi
-	((ALUOp == 2'b01) && (Funct3 == 3'b100)) || //R/I->>blt
-	((ALUOp == 2'b10) && (Funct3 == 3'b000) && (Funct7 == 7'b0100000)) || // R/1->>sub
-	((ALUOp == 2'b10) && (Funct3 == 3'b101) && (Funct7 == 7'b0000000)) || // R/I->>srli
-	((ALUOp == 2'b10) && (Funct3 == 3'b010) && (Funct7 == 7'b0000000)) || // R/I->>slt
-	((ALUOp == 2'b10) && (Funct3 == 3'b010) && (Funct7 != 7'b0000000))); // R/I->>slti
+		  ((ALUOp == 2'b10) && (Funct3 == 3'b110)) ||  // R\I-Or
+      ((ALUOp == 2'b10) && (Funct3 == 3'b000) && (Funct7 == 7'b0000000)) ||  // R\I-Add
+      ((ALUOp == 2'b10) && (Funct3 == 3'b000) && (Funct7 != 7'b0100000)) || // R\I-Addi
+      ((ALUOp == 2'b01) && (Funct3 == 3'b100)) || // Branch-Blt
+      ((AluOp == 2'b10) && (Funct3 == 3'b010)) || // R/I-Slt, Slti
+      ((ALUOp == 2'b10) && (Funct3 == 3'b000) && (Funct7 == 7'b0100000)) || // R/I-Sub
+      ((ALUOp == 2'b10) && (Funct3 == 3'b101) && (Funct7 == 7'b0000000)) || // R/I-Srli
+		  ((AluOp == 2'b11) && (Funct3 == 3'b000))); // U-Jarl
 
   assign Operation[1] = ((ALUOp == 2'b00) ||  // LW\SW
-	((ALUOp == 2'b10) && (Funct3 == 3'b100) && (Funct7 == 7'b0000000))  ||  // R\I->>xor
-	((ALUOp == 2'b10) && (Funct3 == 3'b000) && (Funct7 == 7'b0000000)) ||  // R\I->>add
-	((ALUOp == 2'b10) && (Funct3 == 3'b000) && (Funct7 != 7'b0100000)) || // R\I->>addi
-	((ALUOp == 2'b01) && (Funct3 == 3'b101)) || //R/I->>bge
-	((ALUOp == 2'b10) && (Funct3 == 3'b101) && (Funct7 == 7'b0100000)) || // R/I->>srai
-	((ALUOp == 2'b10) && (Funct3 == 3'b101) && (Funct7 == 7'b0000000)) || // R/I->>srli
-	((ALUOp == 2'b10) && (Funct3 == 3'b010) && (Funct7 == 7'b0000000)) || // R/I->>slt
-	((ALUOp == 2'b10) && (Funct3 == 3'b010) && (Funct7 != 7'b0000000))); // R/I->>slti
+      ((ALUOp == 2'b10) && (Funct3 == 3'b100))  ||  // R\I-Xor
+      ((ALUOp == 2'b10) && (Funct3 == 3'b000) && (Funct7 == 7'b0000000)) ||  // R\I-Add
+      ((ALUOp == 2'b10) && (Funct3 == 3'b000) && (Funct7 != 7'b0100000)) || // R\I-Addi
+      ((ALUOp == 2'b01) && (Funct3 == 3'b101)) || // Branch-Bge
+      ((AluOp == 2'b10) && (Funct3 == 3'b010)) || // R/I-Slt, Slti
+		  ((ALUOp == 2'b10) && (Funct3 == 3'b101) && (Funct7 == 7'b0100000)) || // R/I-Srai
+      ((ALUOp == 2'b10) && (Funct3 == 3'b101) && (Funct7 == 7'b0000000))) || // R/I-Srli
 
-  assign Operation[2] =  (((ALUOp==2'b01) && (Funct3==3'b001)) || // R\I->>bne
-	((ALUOp == 2'b01) && (Funct3 == 3'b100)) || //R/I->>blt
-	((ALUOp == 2'b01) && (Funct3 == 3'b101)) || //R/I->>bge
-	((ALUOp == 2'b10) && (Funct3 == 3'b001) && (Funct7 == 7'b0000000)) || // R/I->>slli
-	((ALUOp == 2'b10) && (Funct3 == 3'b010) && (Funct7 == 7'b0000000)) || // R/I->>slt
-	((ALUOp == 2'b10) && (Funct3 == 3'b010) && (Funct7 != 7'b0000000))); // R/I->>slti
+  assign Operation[2] =  (((ALUOp==2'b01) && (Funct3==3'b001)) || // Branch-Bne
+      ((ALUOp == 2'b01) && (Funct3 == 3'b100)) || // Branch-Blt
+      ((ALUOp == 2'b01) && (Funct3 == 3'b101)) || // Branch-Bge
+      ((AluOp == 2'b10) && (Funct3 == 3'b010)) || // R/I-Slt, Slti
+      ((ALUOp == 2'b10) && (Funct3 == 3'b001) && (Funct7 == 7'b0000000)) || // R/I-Slli
+		  ((AluOp == 2'b11) && (Funct3 == 3'b000))); // U-Jarl
+		  
+  assign Operation[3] = (((ALUOp == 2'b01) && (Funct3 == 3'b000)) ||  // Branch-Beq
+      ((ALUOp == 2'b10) && (Funct3 == 3'b000) && (Funct7 == 7'b0100000))) || // R/I-Sub
+		  ((ALUOp == 2'b10) && (Funct3 == 3'b101) && (Funct7 == 7'b0100000)) || // R/I-Srai
+      ((ALUOp == 2'b10) && (Funct3 == 3'b101) && (Funct7 == 7'b0000000)) || // R/I-Srli
+		  ((ALUOp == 2'b10) && (Funct3 == 3'b001) && (Funct7 == 7'b0000000)) || // R/I-Slli
+		  ((AluOp == 2'b11) && (Funct3 == 3'b000))); // U-Jarl
 
-  assign Operation[3] = (((ALUOp == 2'b01) && (Funct3 == 3'b000)) ||  // R\I->>beq
-	((ALUOp == 2'b10) && (Funct3 == 3'b101) && (Funct7 == 7'b0100000)) || // R/I->>srai
-	((ALUOp == 2'b10) && (Funct3 == 3'b001) && (Funct7 == 7'b0000000)) || // R/I->>slli
-	((ALUOp == 2'b10) && (Funct3 == 3'b101) && (Funct7 == 7'b0000000)) || // R/I->>srli
-	((ALUOp == 2'b10) && (Funct3 == 3'b000) && (Funct7 == 7'b0100000))); // R/1->>sub
+
 endmodule
