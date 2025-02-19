@@ -41,8 +41,8 @@ module alu#(
                     ALUResult = SrcA >> SrcB;
             4'b1100:        // SLLI
                     ALUResult = SrcA << SrcB;
-            4'b1101:       // JALR
-				            ALUResult = SrcA;
+            4'b1101:       // JAL/JALR
+		    ALUResult = SrcA;
             default:
                     ALUResult = 0;
             endcase
