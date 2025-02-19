@@ -20,17 +20,17 @@ module datamemory #(
   logic [ 3:0] Wr;
 
   Memoria32Data mem32 (
-      .raddress(raddress),
-      .waddress(waddress),
-      .Clk(~clk),
-      .Datain(Datain),
-      .Dataout(Dataout),
-      .Wr(Wr)
+      .ReadAddress(raddress),
+      .WriteAddress(waddress),
+      .clk(~clk),
+      .DataIn(Datain),
+      .DataOut(Dataout),
+      .WriteEnable(Wr)
   );
 
   always_ff @(*) begin
-    raddress = {{22{1'b0}}, a};
-    waddress = {{22{1'b0}}, {a[8:2], {2{1'b0}}}};
+    raddress = {23'b0, a};
+    waddress = {23'b0, a[8:2], 2'b0}};
     Datain = wd;
     Wr = 4'b0000;
 
@@ -40,14 +40,14 @@ module datamemory #(
 	        rd <= Dataout;
         end
         3'b000: begin //LB
-	        rd <= $signed(Dataout[7:0]);
+	        rd <= {Dataout[7] ? 24'hFFFFFF : 24'b0, Dataout[7:0]};
 	      end
 	      3'b001:begin //LH
-		      rd <= $signed(Dataout[15:0]);
+		      rd <= {Dataout[15] ? 16'hFFFF : 16'b0, Dataout[15:0]};
 		    end
 		    3'b100:begin //LBU
-			    rd <= {24'b0,Dataout[7:0]};
-				   end
+		      rd <= {24'b0,Dataout[7:0]};
+		    end
         default: rd <= Dataout;
       endcase
     end else if (MemWrite) begin
@@ -57,12 +57,12 @@ module datamemory #(
           Datain <= wd;
         end
         3'b000: begin //SB
-	        Wr <= 4'b0001; //ativa a escrita somente do byte menos significativo (bits [7:0])
-	        Datain[7:0] <= wd;
+	        Wr <= 4'b0100; //ativa a escrita somente do byte menos significativo (bits [7:0])
+	        Datain <= {wd[7] ? 24'hFFFFFF : 24'b0, wd[7:0]};
 	      end
 	      3'b001: begin //SH
-	        Wr <= 4'b0011; //ativa a escrita dos bytes menos significativos (bits [15:0])
-	        Datain[15:0] <= wd;
+	        Wr <= 4'b1100; //ativa a escrita dos bytes menos significativos (bits [15:0])
+	        Datain <= {wd[15] ? 16'hFFFF : 16'B0, wd[15:0]};
 	      end
         default: begin
           Wr <= 4'b1111; //ativa a escrita de todos os 4 bytes (bits [31:0])
