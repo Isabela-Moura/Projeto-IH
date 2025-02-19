@@ -17,7 +17,7 @@ module imm_Gen (
       7'b0010011:  /*I-type*/ // Imediatas
       	case(inst_code[14:12])
       	3'b001: /*SLLI*/
-	      Imm_out = inst_cpde[24:20];
+	      Imm_out = inst_code[24:20];
       	3'b101: /*SRLI, SRAI*/
 	      Imm_out = inst_code[24:20];
       	default: /*ADDI, SLTI*/
