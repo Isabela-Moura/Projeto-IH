@@ -27,7 +27,7 @@ module ALUController (
       ((ALUOp == 2'b01) && (Funct3 == 3'b101)) || // Branch-Bge
       ((ALUOp == 2'b10) && (Funct3 == 3'b010)) || // R/I-Slt, Slti
       ((ALUOp == 2'b10) && (Funct3 == 3'b101) && (Funct7 == 7'b0100000)) || // R/I-Srai
-      ((ALUOp == 2'b10) && (Funct3 == 3'b101) && (Funct7 == 7'b0000000))); || // R/I-Srli
+      ((ALUOp == 2'b10) && (Funct3 == 3'b101) && (Funct7 == 7'b0000000))); // R/I-Srli
 
   assign Operation[2] =  (((ALUOp==2'b01) && (Funct3==3'b001)) || // Branch-Bne
       ((ALUOp == 2'b01) && (Funct3 == 3'b100)) || // Branch-Blt
