@@ -46,8 +46,8 @@ module datamemory #(
 		      rd <= $signed(Dataout[15:0]);
 		    end
 		    3'b100:begin //LBU
-		      rd <= $signed(24'b0,Dataout[7:0]);
-		    end
+			    rd <= {24'b0,Dataout[7:0]};
+				   end
         default: rd <= Dataout;
       endcase
     end else if (MemWrite) begin
