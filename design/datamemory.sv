@@ -20,17 +20,17 @@ module datamemory #(
   logic [ 3:0] Wr;
 
   Memoria32Data mem32 (
-      .ReadAddress(raddress),
-      .WriteAddress(waddress),
-      .clk(~clk),
-      .DataIn(Datain),
-      .DataOut(Dataout),
-      .WriteEnable(Wr)
+      .raddress(raddress),
+      .waddress(waddress),
+      .Clk(~clk),
+      .Datain(Datain),
+      .Dataout(Dataout),
+      .Wr(Wr)
   );
 
   always_ff @(*) begin
     raddress = {23'b0, a};
-    waddress = {23'b0, a[8:2], 2'b0}};
+    waddress = {23'b0, a[8:2], 2'b0};
     Datain = wd;
     Wr = 4'b0000;
 
