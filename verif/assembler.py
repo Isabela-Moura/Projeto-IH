@@ -215,7 +215,7 @@ def translate_instruction(instruction):
 	instr = instruction.split(" ")[0].strip()
 	
 	if instr == "halt":
-		binary = "0" * 25 + opcode[instr]  # ✅ Correção do halt (32 bits)
+		binary = "0" * 25 + opcode[instr]  #Correção do halt (32 bits)
 		return binary
 
 	rd = instruction.split(" ")[1].split(",")[0]
