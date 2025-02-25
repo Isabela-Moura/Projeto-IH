@@ -42,9 +42,14 @@ Seu objetivo é implementar as instruções restantes listadas abaixo:
 | 20 | `HALT`    |      ✅     |    ✅    |      ✅      |
 
 
-**Equipe**
-Carolina Gabriela de Arruda Brito dos Santos (cgabs)
-Isabela Maria de Moura Nascimento (immn)
-Karina Lima de Oliveira (klo)
-Kauanny Karolinna D’Avalon Araújo e Barros (kkdab)
+**Equipe**  
+
+Carolina Gabriela de Arruda Brito dos Santos (cgabs)  
+
+Isabela Maria de Moura Nascimento (immn)  
+
+Karina Lima de Oliveira (klo)  
+
+Kauanny Karolinna D’Avalon Araújo e Barros (kkdab)  
+
 Maria Clara Laranjeira Tenório (mclt)
